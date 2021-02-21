@@ -4,6 +4,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * created by bloshound
@@ -38,15 +39,19 @@ public class StatsUtil {
             if (event.isStartElement() && event.asStartElement().getName().equals(qName)) {
                 String element = event.asStartElement().toString();
 
-                elements.put(element, elements.getOrDefault(element, 0) + 1);
+                elements.merge(element, 1, Integer::sum);
             }
         }
         return elements;
     }
 
 
-    public void findCoincidences() {
+    public void findCoincidences(InputStream is, String name, int coincidenceLevel) throws XMLStreamException {
 
+        getUniqueElements(is, name).entrySet().stream()
+                .filter(pair -> pair.getValue() >= coincidenceLevel)
+                .sorted(Map.Entry.comparingByValue())
+                .forEach(pair -> System.out.println(pair.getKey() + " колличество совпадений: " + pair.getValue()));
     }
 }
 
