@@ -1,9 +1,7 @@
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +29,9 @@ public class Main {
 
 
     private static void findHouseFloors(){
-        XMLEventReader reader = util.
+
+
+        int[] floors = {1, 1, 1, 1, 1};
 
         try(BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream("D:\\address.xml"))) {
 

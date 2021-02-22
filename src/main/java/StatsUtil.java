@@ -57,8 +57,20 @@ public class StatsUtil {
 
 
     public void findCoincidences(InputStream is, String name, int coincidenceLevel) throws XMLStreamException {
+        supportFindCoincidences(getUniqueElements(is, name), coincidenceLevel);
+    }
 
-        getUniqueElements(is, name).entrySet().stream()
+    public void findCoincidences(Reader r, String name, int coincidenceLevel) throws XMLStreamException {
+      supportFindCoincidences(getUniqueElements(r, name), coincidenceLevel);
+    }
+
+    public void findCoincidences(XMLEventReader reader, String name, int coincidenceLevel) throws XMLStreamException {
+        supportFindCoincidences(getUniqueElements(reader, name), coincidenceLevel);
+    }
+
+
+    private void supportFindCoincidences(HashMap<String, Integer> map, int coincidenceLevel){
+         map.entrySet().stream()
                 .filter(pair -> pair.getValue() >= coincidenceLevel)
                 .sorted(Map.Entry.comparingByValue())
                 .forEach(pair -> System.out.println(pair.getKey() + " колличество совпадений: " + pair.getValue()));
