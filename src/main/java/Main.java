@@ -68,7 +68,7 @@ public class Main {
                 if (event.isStartElement()
                         && event.asStartElement().getAttributeByName(cityQName) != null
                         && event.asStartElement().getAttributeByName(floorQName) != null) {
-
+re
                     StartElement startElement = event.asStartElement();
                     String city = startElement.getAttributeByName(cityQName).getValue();
                     int floor = Integer.parseInt(startElement.getAttributeByName(floorQName).getValue());
