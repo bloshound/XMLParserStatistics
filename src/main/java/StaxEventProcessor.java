@@ -20,10 +20,6 @@ public class StaxEventProcessor implements AutoCloseable {
         this.reader = FACTORY.createXMLEventReader(is);
     }
 
-    public  StaxEventProcessor(Reader r) throws XMLStreamException {
-        this.reader = FACTORY.createXMLEventReader(r);
-    }
-
 
     public XMLEventReader getReader() {
         return reader;

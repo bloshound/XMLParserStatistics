@@ -1,6 +1,7 @@
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,8 @@ public class Main {
 
         try(BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream("D:\\address.xml"))) {
 
-            util.findCoincidences(buffIS, "item", 2);
+            XMLEventReader reader = util.createReader(buffIS);
+            util.findCoincidences(reader, "item", 2);
 
         } catch (IOException | XMLStreamException e) {
             e.printStackTrace();
@@ -28,21 +30,21 @@ public class Main {
     }
 
 
-    private static void findHouseFloors(){
+    private static void findHouseFloors(XMLEventReader reader, S){
         StringBuilder sb = new StringBuilder();
-
         int[] floors = {1, 1, 1, 1, 1};
 
         try(BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream("D:\\address.xml"))) {
+            XMLEventReader reader = util.createReader(buffIS);
 
-         HashMap<String, Integer> elements =  util.getUniqueElements(buffIS, "item");
+            while (reader.hasNext()){
 
-         for(Map.Entry<String, Integer> pair: elements.entrySet()){
-             for (int i = 0; i < pair.getValue(); i++) {
-                 sb.append(pair.getKey());
-             }
+                StartElement element = util.getStartElementByName(reader, "item"){
 
-         }
+                }
+
+            }
+
 
 
 
