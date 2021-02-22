@@ -29,7 +29,7 @@ public class Main {
 
 
     private static void findHouseFloors(){
-
+        StringBuilder sb = new StringBuilder();
 
         int[] floors = {1, 1, 1, 1, 1};
 
@@ -38,6 +38,9 @@ public class Main {
          HashMap<String, Integer> elements =  util.getUniqueElements(buffIS, "item");
 
          for(Map.Entry<String, Integer> pair: elements.entrySet()){
+             for (int i = 0; i < pair.getValue(); i++) {
+                 sb.append(pair.getKey());
+             }
 
          }
 
