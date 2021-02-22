@@ -20,27 +20,39 @@ public class Main {
     static StatsUtil util = StatsUtil.INSTANCE;
 
     public static void main(String[] args) {
+
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        String input;
 
         while (true) {
+            System.out.print("Для выхода наберите <exit>. Для запуска программы - введите путь к файлу: ");
+            try {
+                input = consoleReader.readLine();
+                if (input.equalsIgnoreCase("<exit>")){
+                    System.out.println("Выход из программы");
+                    break;
+                }
 
-            System.out.print("Введите путь к файлу: ");
-            try (BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(consoleReader.readLine()))) {
+                try(BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(input))){
+                    System.out.println("Статистика: ");
+                    util.findCoincidences(fileStream,"item", 2);
+                    findHouseFloors();
 
-
-            } catch (FileNotFoundException e) {
-                System.out.println("Не удается найти указзанный файл.");
+                }catch (FileNotFoundException e){
+                    System.out.println("Файл не найден.");
+                }catch (XMLStreamException e){
+                    System.out.println("Ошибка обработки XML.");
+                }
 
             } catch (IOException e) {
-                System.out.println("Ошибка чтения.");
+                System.out.println("Ошибка ввода.");
 
 
             }
         }
     }
 
-
-    private static void findHouseFloors() {
+    private static void findHouseFloors() throws IOException, XMLStreamException {
 
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
@@ -82,9 +94,6 @@ public class Main {
 
             floorHousesByCity.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(pair -> System.out.println(
                     "город " + pair.getKey() + ": " + Arrays.toString(pair.getValue())));
-
-        } catch (IOException | XMLStreamException e) {
-            e.printStackTrace();
         }
     }
 }
