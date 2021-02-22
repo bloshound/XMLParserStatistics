@@ -1,11 +1,14 @@
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.BiFunction;
 
 /**
  * created by bloshound
@@ -33,7 +36,7 @@ public class Main {
 
     private static void findHouseFloors() {
 
-        int[] floors = {1, 1, 1, 1, 1};
+        int[] floors = {0, 0, 0, 0, 0};
 
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
@@ -45,14 +48,33 @@ public class Main {
 
             while (reader.hasNext()) {
                 XMLEvent event = reader.nextEvent();
+
                 if (event.isStartElement()
                         && event.asStartElement().getAttributeByName(cityQName) != null
                         && event.asStartElement().getAttributeByName(floorQName) != null) {
 
+                    StartElement startElement = event.asStartElement();
+                    String city = startElement.getAttributeByName(cityQName).getValue();
+                    int floor = Integer.parseInt(startElement.getAttributeByName(floorQName).getValue());
+
+                    floors[floor] = floors[floor] + 1;
+                    System.out.println(Arrays.toString(floors));
+
+                    BiFunction<int[], int[], int[]> mergeIntArrays = (ints1, ints2) -> {
+                        if (ints1.length != ints2.length) throw new IllegalArgumentException("массивы разного размера");
+
+                        int[] result = new int[ints1.length];
+
+                        for (int i = 0; i < ints1.length; i++) {
+                            result[i] = ints1[i] + ints2[i];
+                        }
+
+                        return result;
+                    };
+
+                    floorHousesByCity.merge(city, floors, mergeIntArrays);
                 }
-
             }
-
 
         } catch (IOException | XMLStreamException e) {
             e.printStackTrace();
