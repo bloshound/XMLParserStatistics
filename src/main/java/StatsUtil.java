@@ -3,6 +3,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,10 @@ public class StatsUtil {
         return new StaxEventProcessor(is).getReader();
     }
 
+    public XMLEventReader createReader(Reader r) throws XMLStreamException {
+        return new StaxEventProcessor(r).getReader();
+    }
+
 
     //2 метода - получение уникальных элементов c колличеством повторений
     public HashMap<String, Integer> getUniqueElements(InputStream is, String name) throws XMLStreamException {
@@ -29,20 +34,25 @@ public class StatsUtil {
         return getUniqueElements(reader, name);
     }
 
+    public HashMap<String, Integer> getUniqueElements(Reader r, String name) throws XMLStreamException {
+        XMLEventReader reader = createReader(r);
+        return getUniqueElements(reader, name);
+    }
+
     public HashMap<String, Integer> getUniqueElements(XMLEventReader reader, String name) throws XMLStreamException {
 
         QName qName = new QName(name);
-        HashMap<String, Integer> elements = new HashMap<>();
+        HashMap<String, Integer> startElements = new HashMap<>();
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
             if (event.isStartElement() && event.asStartElement().getName().equals(qName)) {
                 String element = event.asStartElement().toString();
 
-                elements.merge(element, 1, Integer::sum);
+                startElements.merge(element, 1, Integer::sum);
             }
         }
-        return elements;
+        return startElements;
     }
 
 

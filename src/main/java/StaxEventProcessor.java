@@ -4,6 +4,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * created by bloshound
@@ -18,6 +19,11 @@ public class StaxEventProcessor implements AutoCloseable {
     public StaxEventProcessor(InputStream is) throws XMLStreamException {
         this.reader = FACTORY.createXMLEventReader(is);
     }
+
+    public  StaxEventProcessor(Reader r) throws XMLStreamException {
+        this.reader = FACTORY.createXMLEventReader(r);
+    }
+
 
     public XMLEventReader getReader() {
         return reader;
