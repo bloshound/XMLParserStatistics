@@ -34,8 +34,11 @@ public class Main {
                 }
 
                 try(BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(input))){
-                    System.out.println("Статистика: ");
+
+                    System.out.println("Дублирующиеся записи, с количеством повторений:");
                     util.findCoincidences(fileStream,"item", 2);
+
+                    System.out.println();
                     findHouseFloors();
 
                 }catch (FileNotFoundException e){
@@ -46,7 +49,6 @@ public class Main {
 
             } catch (IOException e) {
                 System.out.println("Ошибка ввода.");
-
 
             }
         }
