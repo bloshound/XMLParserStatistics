@@ -1,7 +1,6 @@
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -20,8 +19,8 @@ public class StatsUtil {
 
     //получение XML ридера
     public XMLEventReader createReader(InputStream is) throws XMLStreamException {
-        return new StaxEventProcessor(is).getReader();    }
-
+        return new StaxEventProcessor(is).getReader();
+    }
 
 
     //2 метода - получение уникальных элементов c колличеством повторений. ПОлучаем String так как определен HashCode

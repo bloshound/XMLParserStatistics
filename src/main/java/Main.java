@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 /**
@@ -27,6 +28,8 @@ public class Main {
             XMLEventReader reader = util.createReader(buffIS);
             util.findCoincidences(reader, "item", 2);
 
+            findHouseFloors();
+
         } catch (IOException | XMLStreamException e) {
             e.printStackTrace();
         }
@@ -36,10 +39,21 @@ public class Main {
 
     private static void findHouseFloors() {
 
-        int[] floors = {0, 0, 0, 0, 0};
-
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
+
+        BiFunction<int[], int[], int[]> mergeIntArrays = (ints1, ints2) -> {
+            if (ints1.length != ints2.length) throw new IllegalArgumentException("массивы разного размера");
+
+            int[] result = new int[ints1.length];
+
+            for (int i = 0; i < ints1.length; i++) {
+                result[i] = ints1[i] + ints2[i];
+            }
+
+            return result;
+        };
+
 
         HashMap<String, int[]> floorHousesByCity = new HashMap<>();
 
@@ -47,6 +61,8 @@ public class Main {
             XMLEventReader reader = util.createReader(buffIS);
 
             while (reader.hasNext()) {
+                int[] floors = new int[6];
+
                 XMLEvent event = reader.nextEvent();
 
                 if (event.isStartElement()
@@ -58,23 +74,15 @@ public class Main {
                     int floor = Integer.parseInt(startElement.getAttributeByName(floorQName).getValue());
 
                     floors[floor] = floors[floor] + 1;
-                    System.out.println(Arrays.toString(floors));
+                 //   System.out.println(Arrays.toString(floors));
 
-                    BiFunction<int[], int[], int[]> mergeIntArrays = (ints1, ints2) -> {
-                        if (ints1.length != ints2.length) throw new IllegalArgumentException("массивы разного размера");
-
-                        int[] result = new int[ints1.length];
-
-                        for (int i = 0; i < ints1.length; i++) {
-                            result[i] = ints1[i] + ints2[i];
-                        }
-
-                        return result;
-                    };
 
                     floorHousesByCity.merge(city, floors, mergeIntArrays);
                 }
             }
+
+            floorHousesByCity.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(pair -> System.out.println(
+                    "город " + pair.getKey() + ": " +  Arrays.toString(pair.getValue())));
 
         } catch (IOException | XMLStreamException e) {
             e.printStackTrace();
