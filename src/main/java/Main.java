@@ -46,17 +46,14 @@ public class Main {
                     findHouseFloorsOnStream(input);
 
                 } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    System.out.println("Файл не найден.");
+                    System.out.println(e.getMessage());
 
                 } catch (XMLStreamException e) {
-                    e.printStackTrace();
-                    System.out.println("Ошибка обработки XML.");
+                    System.out.println(e.getMessage());
                 }
 
             } catch (IOException e) {
-                System.out.println("Ошибка ввода.");
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
     }
@@ -98,6 +95,7 @@ public class Main {
                     floorHousesByCity.merge(city, floors, mergeIntArrays);
                 }
             }
+
             floorHousesByCity.forEach((key, value) -> System.out.println(
                     "город " + key + ": " + Arrays.toString(value)));
         }
