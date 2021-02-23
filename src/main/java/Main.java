@@ -40,13 +40,10 @@ public class Main {
 
                 try (BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(input))) {
 
-
                     util.findCoincidences(fileStream, needElement, coincidenceLevel);
 
                     findHouseFloors(input);
                     findHouseFloorsOnStream(input);
-
-
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -64,7 +61,7 @@ public class Main {
         }
     }
 
-    private static void findHouseFloors(String input) throws IOException, XMLStreamException {
+    private static void findHouseFloors(final String input) throws IOException, XMLStreamException {
         System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
 
         QName cityQName = new QName("city");
@@ -108,7 +105,7 @@ public class Main {
         System.out.println("<------------------------------------------------------------>");
     }
 
-    private static void findHouseFloorsOnStream(String input) throws IOException, XMLStreamException {
+    private static void findHouseFloorsOnStream(final String input) throws IOException, XMLStreamException {
         System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
 
         QName cityQName = new QName("city");
