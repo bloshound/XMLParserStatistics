@@ -4,7 +4,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
-import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,37 +23,43 @@ public class Main {
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
         String input;
 
+        String needElement = "item";
+        int coincidenceLevel = 2;
+
         while (true) {
             System.out.print("Для выхода наберите <exit>. Для запуска программы - введите путь к файлу: ");
             try {
                 input = consoleReader.readLine();
-                if (input.equalsIgnoreCase("<exit>")){
+                if (input.equalsIgnoreCase("exit")) {
                     System.out.println("Выход из программы");
                     break;
                 }
 
-                try(BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(input))){
+                try (BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(input))) {
 
-                    System.out.println("Дублирующиеся записи, с количеством повторений:");
-                    util.findCoincidences(fileStream,"item", 2);
+                    System.out.println("Дублирующиеся записи, с количеством совпадений больше и или равно " + coincidenceLevel + ":");
+                    util.findCoincidences(fileStream, needElement, coincidenceLevel);
 
-                    System.out.println();
-                    findHouseFloors();
+                    findHouseFloors(input);
 
-                }catch (FileNotFoundException e){
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                     System.out.println("Файл не найден.");
-                }catch (XMLStreamException e){
+
+                } catch (XMLStreamException e) {
+                    e.printStackTrace();
                     System.out.println("Ошибка обработки XML.");
                 }
 
             } catch (IOException e) {
                 System.out.println("Ошибка ввода.");
-
+                e.printStackTrace();
             }
         }
     }
 
-    private static void findHouseFloors() throws IOException, XMLStreamException {
+    private static void findHouseFloors(String input) throws IOException, XMLStreamException {
 
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
@@ -73,7 +78,7 @@ public class Main {
 
         HashMap<String, int[]> floorHousesByCity = new HashMap<>();
 
-        try (BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream("D:\\address.xml"))) {
+        try (BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream(input))) {
             XMLEventReader reader = util.createReader(buffIS);
 
             while (reader.hasNext()) {

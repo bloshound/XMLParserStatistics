@@ -5,6 +5,10 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * created by bloshound
@@ -24,26 +28,29 @@ public class StatsUtil {
 
 
     //2 метода - получение уникальных элементов c колличеством повторений. ПОлучаем String так как определен HashCode
-    public HashMap<String, Integer> getUniqueStartElements(InputStream is, String name) throws XMLStreamException {
+    public HashMap<String, Long> getUniqueStartElements(InputStream is, String name) throws XMLStreamException {
         XMLEventReader reader = createReader(is);
         return getUniqueStartElements(reader, name);
     }
 
-    public HashMap<String, Integer> getUniqueStartElements(XMLEventReader reader, String name) throws XMLStreamException {
+    public HashMap<String,Long> getUniqueStartElements(XMLEventReader reader, String name) throws XMLStreamException {
         QName qName = new QName(name);
-        HashMap<String, Integer> startElements = new HashMap<>();
+
+        Stream.Builder<String> builder = Stream.builder();
 
         while (reader.hasNext()) {
             XMLEvent event = reader.nextEvent();
 
             if (event.isStartElement() && event.asStartElement().getName().equals(qName)) {
                 String startElement = event.toString();
-                startElements.merge(startElement, 1, Integer::sum);
+                builder.add(startElement);
             }
         }
-        return startElements;
-    }
 
+      return builder.build()
+               .collect(Collectors.groupingBy(Function.identity(), HashMap::new, Collectors.counting()));
+
+    }
 
     public void findCoincidences(InputStream is, String name, int coincidenceLevel) throws XMLStreamException {
         findCoincidences(createReader(is), name, coincidenceLevel);
@@ -54,7 +61,6 @@ public class StatsUtil {
                 .filter(pair -> pair.getValue() >= coincidenceLevel)
                 .sorted(Map.Entry.comparingByValue())
                 .forEach(pair -> System.out.println(pair.getKey() + " колличество совпадений: " + pair.getValue()));
-
     }
 }
 
