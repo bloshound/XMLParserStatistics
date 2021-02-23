@@ -56,10 +56,12 @@ public class StatsUtil {
     }
 
     public void findCoincidences(XMLEventReader reader, String name, int coincidenceLevel) throws XMLStreamException {
+        System.out.println("Дублирующиеся записи, с количеством совпадений больше и или равно " + coincidenceLevel + ":");
         getUniqueStartElements(reader, name).entrySet().stream()
                 .filter(pair -> pair.getValue() >= coincidenceLevel)
                 .sorted(Map.Entry.comparingByValue())
                 .forEach(pair -> System.out.println(pair.getKey() + " колличество совпадений: " + pair.getValue()));
+        System.out.println("<------------------------------------------------------------>");
     }
 }
 

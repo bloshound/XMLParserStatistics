@@ -40,7 +40,7 @@ public class Main {
 
                 try (BufferedInputStream fileStream = new BufferedInputStream(new FileInputStream(input))) {
 
-                    System.out.println("Дублирующиеся записи, с количеством совпадений больше и или равно " + coincidenceLevel + ":");
+
                     util.findCoincidences(fileStream, needElement, coincidenceLevel);
 
                     findHouseFloors(input);
@@ -65,6 +65,9 @@ public class Main {
     }
 
     private static void findHouseFloors(String input) throws IOException, XMLStreamException {
+        System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
+
+
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
 
@@ -103,9 +106,13 @@ public class Main {
             floorHousesByCity.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(pair -> System.out.println(
                     "город " + pair.getKey() + ": " + Arrays.toString(pair.getValue())));
         }
+
+        System.out.println("<------------------------------------------------------------>");
     }
 
     private static void findHouseFloorsOnStream(String input) throws IOException, XMLStreamException {
+        System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
+
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
 
@@ -137,5 +144,6 @@ public class Main {
                             Collectors.groupingBy(startElement -> startElement.getAttributeByName(floorQName).getValue(), Collectors.counting())))
                     .entrySet().forEach(printer);
         }
+        System.out.println("<------------------------------------------------------------>");
     }
 }
