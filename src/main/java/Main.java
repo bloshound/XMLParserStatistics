@@ -59,6 +59,7 @@ public class Main {
     }
 
     private static void findHouseFloors(final String input) throws IOException, XMLStreamException {
+        long startTime = System.currentTimeMillis();
         System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
 
         QName cityQName = new QName("city");
@@ -74,10 +75,19 @@ public class Main {
             return result;
         };
 
+        Consumer<Map.Entry<String, int[]>> printer = entry -> {
+            String cityFormat = String.format("|%-20s|", entry.getKey());
+            StringBuilder stringBuilder = new StringBuilder(cityFormat).append(": ");
+            for (int i = 1; i < entry.getValue().length; i++) {
+                stringBuilder.append(i).append(" - ").append(entry.getValue()[i]).append(", ");
+            }
+            System.out.println(stringBuilder);
+        };
+
         HashMap<String, int[]> floorHousesByCity = new HashMap<>();
 
-        try (BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream(input))) {
-            XMLEventReader reader = util.createReader(buffIS);
+        try (BufferedInputStream fileStream= new BufferedInputStream(new FileInputStream(input))) {
+            XMLEventReader reader = util.createReader(fileStream);
 
             while (reader.hasNext()) {
                 int[] floors = new int[6];
@@ -95,14 +105,15 @@ public class Main {
                     floorHousesByCity.merge(city, floors, mergeIntArrays);
                 }
             }
-
-            floorHousesByCity.forEach((key, value) -> System.out.println(
-                    "город " + key + ": " + Arrays.toString(value)));
+            floorHousesByCity.entrySet().forEach(printer);
         }
         System.out.println("<----------------------------------------------------------------------->");
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
     }
 
     private static void findHouseFloorsOnStream(final String input) throws IOException, XMLStreamException {
+        long startTime = System.currentTimeMillis();
         System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
 
         QName cityQName = new QName("city");
@@ -138,5 +149,7 @@ public class Main {
                     .entrySet().forEach(printer);
         }
         System.out.println("<---------------------------------------------------------------------->");
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime-startTime) + "ms");
     }
 }
