@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * created by bloshound
@@ -41,6 +44,8 @@ public class Main {
                     util.findCoincidences(fileStream, needElement, coincidenceLevel);
 
                     findHouseFloors(input);
+                    findHouseFloorsOnStream(input);
+
 
 
                 } catch (FileNotFoundException e) {
@@ -60,7 +65,6 @@ public class Main {
     }
 
     private static void findHouseFloors(String input) throws IOException, XMLStreamException {
-
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
 
@@ -75,7 +79,6 @@ public class Main {
             return result;
         };
 
-
         HashMap<String, int[]> floorHousesByCity = new HashMap<>();
 
         try (BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream(input))) {
@@ -83,7 +86,6 @@ public class Main {
 
             while (reader.hasNext()) {
                 int[] floors = new int[6];
-
                 XMLEvent event = reader.nextEvent();
 
                 if (event.isStartElement()
@@ -98,9 +100,42 @@ public class Main {
                     floorHousesByCity.merge(city, floors, mergeIntArrays);
                 }
             }
-
             floorHousesByCity.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(pair -> System.out.println(
                     "город " + pair.getKey() + ": " + Arrays.toString(pair.getValue())));
+        }
+    }
+
+    private static void findHouseFloorsOnStream(String input) throws IOException, XMLStreamException {
+        QName cityQName = new QName("city");
+        QName floorQName = new QName("floor");
+
+        Consumer<Map.Entry<String, Map<String, Long>>> printer = entry1Level -> {
+            System.out.print("город: "  + entry1Level.getKey() + ", колличество зданий этажностью: ") ;
+            entry1Level.getValue().forEach((key, value) -> System.out.print(key + " - " + value + ", "));
+            System.out.println();
+        };
+
+        Stream.Builder<StartElement> builder = Stream.builder();
+
+        try (BufferedInputStream buffIS = new BufferedInputStream(new FileInputStream(input))) {
+            XMLEventReader reader = util.createReader(buffIS);
+
+            while (reader.hasNext()) {
+                XMLEvent event = reader.nextEvent();
+
+                if (event.isStartElement()
+                        && event.asStartElement().getAttributeByName(cityQName) != null
+                        && event.asStartElement().getAttributeByName(floorQName) != null) {
+
+                    StartElement startElement = event.asStartElement();
+                    builder.add(startElement);
+                }
+            }
+
+            builder.build()
+                    .collect(Collectors.groupingBy(startElement -> startElement.getAttributeByName(cityQName).getValue(),
+                            Collectors.groupingBy(startElement -> startElement.getAttributeByName(floorQName).getValue(), Collectors.counting())))
+                    .entrySet().forEach(printer);
         }
     }
 }

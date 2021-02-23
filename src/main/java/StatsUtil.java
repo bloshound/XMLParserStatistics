@@ -26,7 +26,6 @@ public class StatsUtil {
         return new StaxEventProcessor(is).getReader();
     }
 
-
     //2 метода - получение уникальных элементов c колличеством повторений. ПОлучаем String так как определен HashCode
     public HashMap<String, Long> getUniqueStartElements(InputStream is, String name) throws XMLStreamException {
         XMLEventReader reader = createReader(is);
