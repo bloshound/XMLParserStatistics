@@ -99,7 +99,7 @@ public class Main {
             floorHousesByCity.forEach((key, value) -> System.out.println(
                     "город " + key + ": " + Arrays.toString(value)));
         }
-        System.out.println("<------------------------------------------------------------>");
+        System.out.println("<----------------------------------------------------------------------->");
     }
 
     private static void findHouseFloorsOnStream(final String input) throws IOException, XMLStreamException {
@@ -109,8 +109,8 @@ public class Main {
         QName floorQName = new QName("floor");
 
         Consumer<Map.Entry<String, Map<String, Long>>> printer = entry1Level -> {
-            String city = String.format("|%30s|", entry1Level.getKey());
-            StringBuilder stringBuilder = new StringBuilder(city).append(": ");
+            String cityFormat = String.format("|%-20s|", entry1Level.getKey());
+            StringBuilder stringBuilder = new StringBuilder(cityFormat).append(": ");
             entry1Level.getValue().forEach((key, value) -> stringBuilder.append(key).append(" - ").append(value).append(", "));
             System.out.println(stringBuilder);
         };
@@ -137,6 +137,6 @@ public class Main {
                             Collectors.groupingBy(startElement -> startElement.getAttributeByName(floorQName).getValue(), Collectors.counting())))
                     .entrySet().forEach(printer);
         }
-        System.out.println("<------------------------------------------------------------>");
+        System.out.println("<---------------------------------------------------------------------->");
     }
 }
