@@ -67,7 +67,6 @@ public class Main {
     private static void findHouseFloors(String input) throws IOException, XMLStreamException {
         System.out.println("Список городов с 1, 2, 3, 4, 5 - этажными зданиями:");
 
-
         QName cityQName = new QName("city");
         QName floorQName = new QName("floor");
 
@@ -78,7 +77,6 @@ public class Main {
             for (int i = 0; i < ints1.length; i++) {
                 result[i] = ints1[i] + ints2[i];
             }
-
             return result;
         };
 
@@ -103,8 +101,8 @@ public class Main {
                     floorHousesByCity.merge(city, floors, mergeIntArrays);
                 }
             }
-            floorHousesByCity.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(pair -> System.out.println(
-                    "город " + pair.getKey() + ": " + Arrays.toString(pair.getValue())));
+            floorHousesByCity.forEach((key, value) -> System.out.println(
+                    "город " + key + ": " + Arrays.toString(value)));
         }
 
         System.out.println("<------------------------------------------------------------>");
