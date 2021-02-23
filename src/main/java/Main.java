@@ -99,7 +99,6 @@ public class Main {
             floorHousesByCity.forEach((key, value) -> System.out.println(
                     "город " + key + ": " + Arrays.toString(value)));
         }
-
         System.out.println("<------------------------------------------------------------>");
     }
 
@@ -110,9 +109,10 @@ public class Main {
         QName floorQName = new QName("floor");
 
         Consumer<Map.Entry<String, Map<String, Long>>> printer = entry1Level -> {
-            System.out.print("город: "  + entry1Level.getKey() + ", колличество зданий этажностью: ") ;
-            entry1Level.getValue().forEach((key, value) -> System.out.print(key + " - " + value + ", "));
-            System.out.println();
+            String city = String.format("|%30s|", entry1Level.getKey());
+            StringBuilder stringBuilder = new StringBuilder(city).append(": ");
+            entry1Level.getValue().forEach((key, value) -> stringBuilder.append(key).append(" - ").append(value).append(", "));
+            System.out.println(stringBuilder);
         };
 
         Stream.Builder<StartElement> builder = Stream.builder();
