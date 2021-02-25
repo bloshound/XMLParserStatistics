@@ -1,22 +1,20 @@
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
-import java.io.Reader;
+
 
 /**
  * created by bloshound
  * bloshound@gmail.com
  */
 
-public class StaxEventProcessor implements AutoCloseable {
+public class EvenReaderInitializer implements AutoCloseable {
     private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
 
     private final XMLEventReader reader;
 
-    public StaxEventProcessor(InputStream is) throws XMLStreamException {
+    public EvenReaderInitializer(InputStream is) throws XMLStreamException {
         this.reader = FACTORY.createXMLEventReader(is);
     }
 

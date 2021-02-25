@@ -5,7 +5,6 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,7 +22,7 @@ public class StatsUtil {
 
     //получение XML ридера
     public XMLEventReader createReader(InputStream is) throws XMLStreamException {
-        return new StaxEventProcessor(is).getReader();
+        return new EvenReaderInitializer(is).getReader();
     }
 
     //2 метода - получение уникальных элементов c колличеством повторений. ПОлучаем String так как определен HashCode
