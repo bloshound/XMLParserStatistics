@@ -22,7 +22,7 @@ public class StatsUtil {
 
     //получение XML ридера
     public XMLEventReader createReader(InputStream is) throws XMLStreamException {
-        return new EvenReaderInitializer(is).getReader();
+        return new EventReaderInitializer(is).getReader();
     }
 
     //2 метода - получение уникальных элементов c колличеством повторений. ПОлучаем String так как определен HashCode

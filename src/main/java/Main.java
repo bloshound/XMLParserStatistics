@@ -71,7 +71,6 @@ public class Main {
         BiFunction<int[], int[], int[]> mergeIntArrays = (ints1, ints2) -> {
             if (ints1.length != ints2.length) throw new IllegalArgumentException("Arrays of different sizes");
 
-
             for (int i = 0; i < ints1.length; i++) {
                 ints1[i] = ints1[i] + ints2[i];
             }

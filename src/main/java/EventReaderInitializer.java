@@ -9,12 +9,12 @@ import java.io.InputStream;
  * bloshound@gmail.com
  */
 
-public class EvenReaderInitializer implements AutoCloseable {
+public class EventReaderInitializer implements AutoCloseable {
     private static final XMLInputFactory FACTORY = XMLInputFactory.newInstance();
 
     private final XMLEventReader reader;
 
-    public EvenReaderInitializer(InputStream is) throws XMLStreamException {
+    public EventReaderInitializer(InputStream is) throws XMLStreamException {
         this.reader = FACTORY.createXMLEventReader(is);
     }
 
